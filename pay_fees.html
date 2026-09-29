@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+{% block title %}Pay Fees Now{% endblock %}
+{% block content %}
+
+<div class="crumb"><a href="{{ url_for('admin_dashboard') }}">&larr; Dashboard</a></div>
+
+<style>
+  .pf-crumb a {
+    font-size: 13px; font-weight: 600; color: #6b7280;
+    text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+    transition: color 0.15s ease;
+  }
+  .pf-crumb a:hover { color: #4f46e5; }
+
+  .pf-head { margin: 4px 0 22px; }
+  .pf-head .eyebrow {
+    font-size: 11.5px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; color: #9aa0ab;
+  }
+  .pf-head h1 { margin: 4px 0 0; font-size: 22px; font-weight: 700; color: #1f2430; }
+
+  /* lookup card */
+  .pf-lookup-card {
+    max-width: 520px;
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #eef0f4;
+    box-shadow: 0 4px 24px rgba(20,30,60,0.07);
+    overflow: hidden;
+    margin-bottom: 26px;
+  }
+  .pf-lookup-header {
+    padding: 22px 28px;
+    background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+    color: #fff;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .pf-lookup-header .icon-badge {
+    width: 42px; height: 42px;
+    background: rgba(255,255,255,0.18);
+    border-radius: 11px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .pf-lookup-header .icon-badge svg { width: 20px; height: 20px; stroke: #fff; }
+  .pf-lookup-header h2 { margin: 0; font-size: 16px; font-weight: 600; }
+  .pf-lookup-header p { margin: 2px 0 0; font-size: 12.5px; opacity: 0.85; }
+
+  .pf-lookup-body { padding: 24px 28px 28px; }
+  .field label {
+    display: block;
+    font-size: 12.5px; font-weight: 600; letter-spacing: 0.02em;
+    text-transform: uppercase; color: #6b7280; margin-bottom: 6px;
+  }
+  .field .input-wrap { position: relative; }
+  .field .input-wrap svg {
+    position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+    width: 16px; height: 16px; stroke: #9ca3af; pointer-events: none;
+  }
+  .field input {
+    width: 100%;
+    padding: 11px 14px 11px 38px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 10px;
+    font-size: 14.5px;
+    font-family: 'IBM Plex Mono', monospace;
+    color: #111827;
+    background: #f9fafb;
+    box-sizing: border-box;
+    transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+  }
+  .field input:focus {
+    outline: none;
+    border-color: #4f46e5;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(79,70,229,0.12);
+  }
+  .field input::placeholder { color: #b0b5bf; }
+
+  .pf-btn-block {
+    width: 100%;
+    margin-top: 16px;
+    padding: 13px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+    color: #fff;
+    font-size: 14.5px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+  .pf-btn-block:hover { box-shadow: 0 6px 18px rgba(79,70,229,0.3); transform: translateY(-1px); }
+  .pf-btn-block svg { width: 16px; height: 16px; }
+
+  /* receipt card */
+  .pf-receipt-card {
+    max-width: 520px;
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #eef0f4;
+    box-shadow: 0 4px 24px rgba(20,30,60,0.07);
+    overflow: hidden;
+  }
+  .pf-receipt-banner {
+    padding: 18px 28px;
+    background: #ecfdf5;
+    border-bottom: 1px solid #d1fae5;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .pf-receipt-banner svg { width: 18px; height: 18px; stroke: #059669; flex-shrink: 0; }
+  .pf-receipt-banner span { font-size: 13.5px; font-weight: 600; color: #059669; }
+
+  .pf-receipt-body { padding: 24px 28px 10px; }
+  .kv-list { display: flex; flex-direction: column; }
+  .kv-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 0;
+    border-bottom: 1px solid #f3f4f7;
+  }
+  .kv-row:last-child { border-bottom: none; }
+  .kv-row .k { font-size: 12.5px; font-weight: 600; color: #8a8f9c; }
+  .kv-row .v { font-size: 14px; font-weight: 500; color: #1f2430; font-family: 'IBM Plex Mono', monospace; }
+  .kv-row.highlight .v { font-size: 17px; font-weight: 700; }
+  .kv-row.due .v { color: #dc2626; }
+  .kv-row.paid .v { color: #059669; }
+
+  .pf-receipt-footer { padding: 18px 28px 26px; }
+  .pf-pay-btn {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+    color: #fff;
+    font-size: 14.5px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+  .pf-pay-btn:hover { box-shadow: 0 6px 18px rgba(5,150,105,0.3); transform: translateY(-1px); }
+  .pf-pay-btn svg { width: 16px; height: 16px; }
+
+  .pf-settled {
+    display: flex; align-items: center; gap: 10px;
+    padding: 13px 16px;
+    background: #f0fdf9;
+    border: 1px dashed #a7f3d0;
+    border-radius: 10px;
+    color: #059669;
+    font-size: 13.5px;
+    font-weight: 600;
+  }
+  .pf-settled svg { width: 16px; height: 16px; flex-shrink: 0; }
+
+  @media (max-width: 560px) {
+    .pf-lookup-body, .pf-receipt-body, .pf-receipt-footer { padding-left: 20px; padding-right: 20px; }
+    .pf-lookup-header, .pf-receipt-banner { padding-left: 20px; padding-right: 20px; }
+  }
+</style>
+
+<div class="crumb pf-crumb"><a href="{{ url_for('admin_dashboard') }}">&larr; Dashboard</a></div>
+
+<div class="pf-head">
+  <span class="eyebrow">Admin Office Fee Payment Counter</span>
+  <h1>Pay Fees Now</h1>
+</div>
+
+<div class="pf-lookup-card">
+  <div class="pf-lookup-header">
+    <div class="icon-badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+    </div>
+    <div>
+      <h2>Look Up Student</h2>
+      <p>Enter a Student ID to fetch their fee account</p>
+    </div>
+  </div>
+  <form method="POST" class="pf-lookup-body">
+    <div class="field">
+      <label for="student_id">Enter Student ID</label>
+      <div class="input-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 9h.01M9 15h.01M15 9h6M15 15h6"/></svg>
+        <input type="text" name="student_id" id="student_id" placeholder="e.g. STU101" required>
+      </div>
+    </div>
+    <button type="submit" name="verify" value="1" class="pf-btn-block">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      Verify Student &amp; Fetch Fee Details
+    </button>
+  </form>
+</div>
+
+{% if student and record %}
+{% set balance = (record.total_fee|int) - (record.paid_fee|int) %}
+<div class="pf-receipt-card">
+  <div class="pf-receipt-banner">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+    <span>Student Record Verified</span>
+  </div>
+
+  <div class="pf-receipt-body">
+    <div class="kv-list">
+      <div class="kv-row"><span class="k">Student ID</span><span class="v">{{ student.student_id }}</span></div>
+      <div class="kv-row"><span class="k">Name</span><span class="v">{{ student.first_name }} {{ student.last_name }}</span></div>
+      <div class="kv-row"><span class="k">Class &amp; Section</span><span class="v">Class {{ student.class }} ({{ student.division }})</span></div>
+      <div class="kv-row"><span class="k">Total Fee</span><span class="v">&#8377;{{ '{:,}'.format(record.total_fee|int) }}</span></div>
+      <div class="kv-row paid"><span class="k">Amount Previously Paid</span><span class="v">&#8377;{{ '{:,}'.format(record.paid_fee|int) }}</span></div>
+      <div class="kv-row highlight due"><span class="k">Pending Balance</span><span class="v">&#8377;{{ '{:,}'.format(balance) }}</span></div>
+    </div>
+  </div>
+
+  <div class="pf-receipt-footer">
+    {% if balance > 0 %}
+    <form method="POST" style="margin:0;">
+      <input type="hidden" name="student_id" value="{{ student.student_id }}">
+      <button type="submit" name="confirm_payment" value="1" class="pf-pay-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/></svg>
+        Confirm Payment &amp; Collect Receipt
+      </button>
+    </form>
+    {% else %}
+    <div class="pf-settled">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+      This account is fully settled.
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endif %}
+{% endblock %}

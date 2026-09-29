@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+{% block title %}Promote Class{% endblock %}
+{% block content %}
+
+<div class="crumb"><a href="{{ url_for('admin_dashboard') }}">&larr; Dashboard</a></div>
+
+<style>
+  .pr-crumb a {
+    font-size: 13px; font-weight: 600; color: #6b7280;
+    text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+    transition: color 0.15s ease;
+  }
+  .pr-crumb a:hover { color: #4f46e5; }
+
+  .pr-head { margin: 4px 0 22px; }
+  .pr-head .eyebrow {
+    font-size: 11.5px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; color: #9aa0ab;
+  }
+  .pr-head h1 { margin: 4px 0 0; font-size: 22px; font-weight: 700; color: #1f2430; }
+
+  .pr-card {
+    max-width: 520px;
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #eef0f4;
+    box-shadow: 0 4px 24px rgba(20,30,60,0.07);
+    overflow: hidden;
+  }
+
+  .pr-notice {
+    display: flex;
+    gap: 12px;
+    padding: 18px 26px;
+    background: #fff7ed;
+    border-bottom: 1px solid #fed7aa;
+  }
+  .pr-notice svg {
+    width: 20px; height: 20px;
+    stroke: #ea580c;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .pr-notice p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.55;
+    color: #9a5b1f;
+  }
+  .pr-notice p b { color: #7c3d0e; }
+
+  .pr-body { padding: 26px 26px 28px; }
+
+  .field-row { display: flex; gap: 16px; margin-bottom: 20px; }
+  .field-row .field { flex: 1; margin-bottom: 0; }
+  .field label {
+    display: block;
+    font-size: 12.5px; font-weight: 600; letter-spacing: 0.02em;
+    text-transform: uppercase; color: #6b7280; margin-bottom: 6px;
+  }
+  .field select {
+    width: 100%;
+    padding: 11px 36px 11px 14px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 10px;
+    font-size: 14.5px;
+    color: #111827;
+    background: #f9fafb;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .field select:focus {
+    outline: none;
+    border-color: #ea580c;
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(234,88,12,0.12);
+  }
+
+  @media (max-width: 480px) {
+    .field-row { flex-direction: column; gap: 14px; }
+  }
+
+  .pr-submit {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #ea580c 0%, #f97316 100%);
+    color: #fff;
+    font-size: 14.5px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+  .pr-submit:hover { box-shadow: 0 6px 18px rgba(234,88,12,0.3); transform: translateY(-1px); }
+  .pr-submit svg { width: 16px; height: 16px; }
+</style>
+
+<div class="crumb pr-crumb"><a href="{{ url_for('admin_dashboard') }}">&larr; Dashboard</a></div>
+
+<div class="pr-head">
+  <span class="eyebrow">EduSmart</span>
+  <h1>Promote Students Class</h1>
+</div>
+
+<div class="pr-card">
+  <div class="pr-notice">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4M12 17h.01"/></svg>
+    <p>Select the current class &amp; division/stream to promote <b>all enrolled students</b> into the next grade level (e.g. Class 1 &rarr; Class 2). This action applies to the entire section at once.</p>
+  </div>
+
+  <form method="POST" class="pr-body">
+    <div class="field-row">
+      <div class="field">
+        <label for="class">Select Current Class</label>
+        <select name="class" id="class" required>
+          <option value="">Choose&hellip;</option>
+          {% for c in classes %}<option value="{{ c }}">Class {{ c }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="field">
+        <label for="division">Division / Stream</label>
+        <select name="division" id="division" required>
+          <option value="">Choose&hellip;</option>
+          <option value="A">A</option>
+          <option value="B">B</option>
+        </select>
+      </div>
+    </div>
+
+    <button type="submit" class="pr-submit">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+      Promote Students
+    </button>
+  </form>
+</div>
+{% endblock %}

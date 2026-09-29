@@ -1,0 +1,195 @@
+{% extends "base.html" %}
+{% block title %}Add Student{% endblock %}
+{% block content %}
+<div class="crumb"><a href="{{ url_for('admin_dashboard') }}">&larr; Dashboard</a></div>
+
+<div class="page-head">
+  <div>
+    <span class="eyebrow">EduSmart Portal</span>
+    <h1>Add New Student</h1>
+  </div>
+</div>
+
+<style>
+  .student-form-card {
+    max-width: 620px;
+    margin: 24px auto 0;
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(20, 30, 60, 0.08);
+    border: 1px solid #eef0f4;
+    overflow: hidden;
+  }
+  .student-form-header {
+    padding: 24px 32px;
+    background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .student-form-header .icon-badge {
+    width: 44px; height: 44px;
+    background: rgba(255,255,255,0.18);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .student-form-header .icon-badge svg { width: 22px; height: 22px; stroke: #fff; }
+  .student-form-header h2 { margin: 0; font-size: 17px; font-weight: 600; }
+  .student-form-header p { margin: 2px 0 0; font-size: 13px; opacity: 0.85; }
+
+  .student-form-body { padding: 28px 32px 32px; }
+
+  .field-row { display: flex; gap: 16px; margin-bottom: 18px; }
+  .field-row .field { flex: 1; }
+  .field { margin-bottom: 18px; }
+  .field:last-of-type { margin-bottom: 0; }
+
+  .field label {
+    display: block;
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: #6b7280;
+    margin-bottom: 6px;
+  }
+  .field .input-wrap { position: relative; }
+  .field .input-wrap svg {
+    position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+    width: 16px; height: 16px; stroke: #9ca3af; pointer-events: none;
+  }
+  .field input {
+    width: 100%;
+    padding: 11px 14px 11px 38px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 10px;
+    font-size: 14.5px;
+    color: #111827;
+    background: #f9fafb;
+    transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+    box-sizing: border-box;
+  }
+  .field input:focus {
+    outline: none;
+    border-color: #6366f1;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.12);
+  }
+  .field input::placeholder { color: #b0b5bf; }
+  .field small.hint {
+    display: block;
+    margin-top: 5px;
+    font-size: 12px;
+    color: #9ca3af;
+  }
+
+  .btn-block {
+    width: 100%;
+    margin-top: 8px;
+    padding: 13px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .btn-block:hover { box-shadow: 0 6px 18px rgba(79, 70, 229, 0.3); transform: translateY(-1px); }
+  .btn-block svg { width: 17px; height: 17px; stroke: #fff; }
+
+  @media (max-width: 560px) {
+    .field-row { flex-direction: column; gap: 0; }
+    .student-form-body { padding: 22px 20px 26px; }
+    .student-form-header { padding: 20px; }
+  }
+</style>
+
+<div class="student-form-card">
+  <div class="student-form-header">
+    <div class="icon-badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+        <circle cx="9" cy="7" r="4"/>
+        <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+      </svg>
+    </div>
+    <div>
+      <h2>Student Details</h2>
+      <p>Fill in the information below to enroll a new student</p>
+    </div>
+  </div>
+
+  <form method="POST" class="student-form-body">
+    <div class="field-row">
+      <div class="field">
+        <label for="first_name">First Name</label>
+        <div class="input-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <input type="text" name="first_name" id="first_name" placeholder="e.g. Meera" required>
+        </div>
+      </div>
+      <div class="field">
+        <label for="last_name">Last Name</label>
+        <div class="input-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <input type="text" name="last_name" id="last_name" placeholder="e.g. Patel" required>
+        </div>
+      </div>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="class">Class (Number)</label>
+        <div class="input-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          <input type="text" name="class" id="class" placeholder="e.g. 9 or 11" required>
+        </div>
+      </div>
+      <div class="field">
+        <label for="division">Division</label>
+        <div class="input-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          <input type="text" name="division" id="division" placeholder="e.g. Division A" required>
+        </div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="email">Email Address</label>
+      <div class="input-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg>
+        <input type="email" name="email" id="email" placeholder="student@example.com" required>
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="phone">Phone</label>
+      <div class="input-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.362 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        <input type="tel" name="phone" id="phone" placeholder="e.g. 9876543210">
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="password">Password</label>
+      <div class="input-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <input type="text" name="password" id="password" placeholder="Leave blank for default">
+      </div>
+      <small class="hint">Defaults to <code>stud123</code> if left blank</small>
+    </div>
+
+    <button type="submit" class="btn-block">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+      Save Student
+    </button>
+  </form>
+</div>
+{% endblock %}

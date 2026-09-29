@@ -1,0 +1,236 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+
+<style>
+  /* header banner */
+  .adm-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+    padding: 26px 30px;
+    margin-bottom: 26px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+    color: #fff;
+    box-shadow: 0 10px 28px rgba(79,70,229,0.22);
+  }
+  .adm-head .eyebrow {
+    font-size: 12px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; opacity: 0.8;
+  }
+  .adm-head h1 { margin: 4px 0 6px; font-size: 24px; font-weight: 700; }
+  .adm-head p { margin: 0; font-size: 13.5px; opacity: 0.85; }
+  .adm-head-icon {
+    width: 52px; height: 52px;
+    border-radius: 14px;
+    background: rgba(255,255,255,0.16);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .adm-head-icon svg { width: 24px; height: 24px; stroke: #fff; }
+
+  /* stat cards */
+  .adm-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 16px;
+    margin-bottom: 34px;
+  }
+  .adm-stat {
+    background: #ffffff;
+    border: 1px solid #eef0f4;
+    border-radius: 16px;
+    padding: 20px 22px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 2px 10px rgba(31,36,48,0.04);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .adm-stat:hover { transform: translateY(-2px); box-shadow: 0 10px 22px rgba(31,36,48,0.08); }
+  .adm-stat .icon {
+    width: 44px; height: 44px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .adm-stat .icon svg { width: 20px; height: 20px; }
+  .adm-stat .num {
+    font-family: 'Poppins', sans-serif;
+    font-size: 24px; font-weight: 700; color: #1f2430;
+    display: block;
+    line-height: 1.1;
+  }
+  .adm-stat .label {
+    font-size: 12px; color: #8a8f9c; font-weight: 500;
+  }
+  .adm-stat.students .icon { background: #eef2ff; color: #4f46e5; }
+  .adm-stat.teachers .icon { background: #ecfdf5; color: #059669; }
+  .adm-stat.fees .icon { background: #fff7ed; color: #ea580c; }
+  .adm-stat.complaints .icon { background: #fef2f2; color: #dc2626; }
+
+  /* sections */
+  .adm-section-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    color: #1f2430;
+    margin: 0 0 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #eef0f4;
+  }
+  .adm-section { margin-bottom: 32px; }
+
+  .adm-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 18px;
+  }
+
+  .adm-tile {
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    border: 1px solid #eef0f4;
+    border-radius: 16px;
+    padding: 22px 22px 20px;
+    text-decoration: none;
+    color: inherit;
+    box-shadow: 0 2px 10px rgba(31,36,48,0.04);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+  }
+  .adm-tile:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 14px 28px rgba(31,36,48,0.10);
+    border-color: transparent;
+  }
+  .adm-tile-icon {
+    width: 42px; height: 42px;
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 14px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+  }
+  .adm-tile-icon svg { width: 20px; height: 20px; }
+  .adm-tile h3 { margin: 0 0 6px; font-size: 15.5px; font-weight: 600; color: #1f2430; }
+  .adm-tile p { margin: 0 0 16px; font-size: 13px; line-height: 1.5; color: #7a8091; flex-grow: 1; }
+  .adm-tile-cta {
+    font-size: 12.5px; font-weight: 600; color: #4f46e5;
+    display: inline-flex; align-items: center; gap: 5px;
+  }
+  .adm-tile-cta svg { width: 13px; height: 13px; transition: transform 0.15s ease; }
+  .adm-tile:hover .adm-tile-cta svg { transform: translateX(3px); }
+
+  /* per-section accent colors */
+  .tile-add-student .adm-tile-icon,
+  .tile-add-teacher .adm-tile-icon { background: #eef2ff; color: #4f46e5; }
+  .tile-view-students .adm-tile-icon,
+  .tile-view-teachers .adm-tile-icon { background: #ecfdf5; color: #059669; }
+  .tile-promote .adm-tile-icon { background: #fdf2f8; color: #db2777; }
+  .tile-fee-control .adm-tile-icon,
+  .tile-pay-fees .adm-tile-icon { background: #fff7ed; color: #ea580c; }
+  .tile-complaints .adm-tile-icon { background: #fef2f2; color: #dc2626; }
+</style>
+
+<div class="adm-head">
+  <div>
+    <span class="eyebrow">Admin: {{ session.get('name') }}</span>
+    <h1>Control Panel</h1>
+    <p>Full administrative oversight of the EduSmart system.</p>
+  </div>
+  <div class="adm-head-icon">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/></svg>
+  </div>
+</div>
+
+<div class="adm-stats">
+  <div class="adm-stat students">
+    <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+    <div><span class="num">{{ total_students }}</span><span class="label">Total Students</span></div>
+  </div>
+  <div class="adm-stat teachers">
+    <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+    <div><span class="num">{{ total_teachers }}</span><span class="label">Total Teachers</span></div>
+  </div>
+  <div class="adm-stat fees">
+    <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/></svg></div>
+    <div><span class="num">{{ pending_fee_count }}</span><span class="label">Fee Accounts Pending</span></div>
+  </div>
+  <div class="adm-stat complaints">
+    <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+    <div><span class="num">{{ open_complaints }}</span><span class="label">Open Complaints</span></div>
+  </div>
+</div>
+
+<div class="adm-section">
+  <h2 class="adm-section-title">Students</h2>
+  <div class="adm-grid">
+    <a href="{{ url_for('admin_add_student') }}" class="adm-tile tile-add-student">
+      <div class="adm-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></div>
+      <h3>Add Student</h3>
+      <p>Enroll a new student.</p>
+      <span class="adm-tile-cta">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </a>
+    <a href="{{ url_for('admin_view_students') }}" class="adm-tile tile-view-students">
+      <div class="adm-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+      <h3>View Students</h3>
+      <p>Search and audit records.</p>
+      <span class="adm-tile-cta">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </a>
+    <a href="{{ url_for('admin_promote') }}" class="adm-tile tile-promote">
+      <div class="adm-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></div>
+      <h3>Promote Class</h3>
+      <p>Advance a class to the next grade.</p>
+      <span class="adm-tile-cta">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </a>
+  </div>
+</div>
+
+<div class="adm-section">
+  <h2 class="adm-section-title">Fees</h2>
+  <div class="adm-grid">
+    <a href="{{ url_for('admin_fees') }}" class="adm-tile tile-fee-control">
+      <div class="adm-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2.5"/></svg></div>
+      <h3>Admin Fee Control</h3>
+      <p>Review and manage fee records.</p>
+      <span class="adm-tile-cta">Manage Fees <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </a>
+    <a href="{{ url_for('admin_pay_fees') }}" class="adm-tile tile-pay-fees">
+      <div class="adm-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+      <h3>Pay Fees Now</h3>
+      <p>Process a payment at the office counter.</p>
+      <span class="adm-tile-cta">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </a>
+  </div>
+</div>
+
+<div class="adm-section">
+  <h2 class="adm-section-title">Faculty &amp; Complaints</h2>
+  <div class="adm-grid">
+    <a href="{{ url_for('admin_add_teacher') }}" class="adm-tile tile-add-teacher">
+      <div class="adm-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></svg></div>
+      <h3>Add Teacher</h3>
+      <p>Register new faculty.</p>
+      <span class="adm-tile-cta">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </a>
+    <a href="{{ url_for('admin_view_teachers') }}" class="adm-tile tile-view-teachers">
+      <div class="adm-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
+      <h3>View Teachers</h3>
+      <p>Faculty directory by subject.</p>
+      <span class="adm-tile-cta">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </a>
+    <a href="{{ url_for('admin_complaints') }}" class="adm-tile tile-complaints">
+      <div class="adm-tile-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+      <h3>Complaints</h3>
+      <p>Review and resolve raised issues.</p>
+      <span class="adm-tile-cta">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+    </a>
+  </div>
+</div>
+{% endblock %}

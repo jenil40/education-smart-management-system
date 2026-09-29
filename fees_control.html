@@ -1,0 +1,246 @@
+{% extends "base.html" %}
+{% block title %}Fees Control{% endblock %}
+{% block content %}
+
+<div class="crumb"><a href="{{ url_for('admin_dashboard') }}">&larr; Dashboard</a></div>
+
+<style>
+  .fc-crumb a {
+    font-size: 13px; font-weight: 600; color: #6b7280;
+    text-decoration: none; display: inline-flex; align-items: center; gap: 6px;
+    transition: color 0.15s ease;
+  }
+  .fc-crumb a:hover { color: #4f46e5; }
+
+  .fc-head { margin: 4px 0 22px; }
+  .fc-head .eyebrow {
+    font-size: 11.5px; font-weight: 600; letter-spacing: 0.08em;
+    text-transform: uppercase; color: #9aa0ab;
+  }
+  .fc-head h1 { margin: 4px 0 0; font-size: 22px; font-weight: 700; color: #1f2430; }
+
+  /* filter card */
+  .fc-filter-card {
+    max-width: 560px;
+    background: #ffffff;
+    border: 1px solid #eef0f4;
+    border-radius: 16px;
+    padding: 26px 28px;
+    box-shadow: 0 2px 10px rgba(31,36,48,0.04);
+    margin-bottom: 30px;
+  }
+  .fc-filter-row { display: flex; gap: 16px; margin-bottom: 18px; }
+  .fc-filter-row .field { flex: 1; margin-bottom: 0; }
+  .field label {
+    display: block;
+    font-size: 12.5px; font-weight: 600; letter-spacing: 0.02em;
+    text-transform: uppercase; color: #6b7280; margin-bottom: 6px;
+  }
+  .field select {
+    width: 100%;
+    padding: 11px 36px 11px 14px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 10px;
+    font-size: 14.5px;
+    color: #111827;
+    background: #f9fafb;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239ca3af' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .field select:focus {
+    outline: none;
+    border-color: #4f46e5;
+    background-color: #fff;
+    box-shadow: 0 0 0 3px rgba(79,70,229,0.12);
+  }
+  .fc-submit {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #4f46e5 0%, #6366f1 100%);
+    color: #fff;
+    font-size: 14.5px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
+  }
+  .fc-submit:hover { box-shadow: 0 6px 18px rgba(79,70,229,0.3); transform: translateY(-1px); }
+  .fc-submit svg { width: 16px; height: 16px; }
+
+  @media (max-width: 480px) {
+    .fc-filter-row { flex-direction: column; gap: 14px; }
+  }
+
+  /* results summary */
+  .fc-summary {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-bottom: 22px;
+  }
+  .fc-summary-card {
+    flex: 1;
+    min-width: 150px;
+    background: #ffffff;
+    border: 1px solid #eef0f4;
+    border-radius: 14px;
+    padding: 16px 20px;
+    box-shadow: 0 2px 10px rgba(31,36,48,0.04);
+  }
+  .fc-summary-card .label {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.04em;
+    text-transform: uppercase; color: #9aa0ab; margin-bottom: 6px;
+  }
+  .fc-summary-card .value {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 19px; font-weight: 600; color: #1f2430;
+  }
+  .fc-summary-card.collected .value { color: #059669; }
+  .fc-summary-card.due .value { color: #dc2626; }
+
+  /* table */
+  .fc-table-card {
+    background: #ffffff;
+    border: 1px solid #eef0f4;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(31,36,48,0.04);
+  }
+  .fc-table-wrap { overflow-x: auto; }
+  .fc-table { width: 100%; border-collapse: collapse; font-size: 13.5px; min-width: 640px; }
+  .fc-table thead th {
+    text-align: left;
+    padding: 13px 20px;
+    font-size: 11px; font-weight: 700; letter-spacing: 0.05em;
+    text-transform: uppercase; color: #9aa0ab;
+    background: #fafbfc;
+    border-bottom: 1px solid #eef0f4;
+    white-space: nowrap;
+  }
+  .fc-table tbody td {
+    padding: 13px 20px;
+    border-bottom: 1px solid #f3f4f7;
+    color: #1f2430;
+  }
+  .fc-table tbody tr:last-child td { border-bottom: none; }
+  .fc-table tbody tr:hover { background: #fafaff; }
+  .fc-table td.sid {
+    font-family: 'IBM Plex Mono', monospace;
+    color: #9aa0ab;
+    font-size: 12.5px;
+  }
+  .fc-table td.name { font-weight: 600; }
+  .fc-table td.amt { font-family: 'IBM Plex Mono', monospace; color: #4b5160; }
+  .fc-table td.balance { font-family: 'IBM Plex Mono', monospace; color: #dc2626; font-weight: 600; }
+
+  .stamp {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 12px; border-radius: 999px;
+    font-size: 11.5px; font-weight: 700; letter-spacing: 0.02em; text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .stamp::before { content: ""; width: 6px; height: 6px; border-radius: 50%; }
+  .stamp-paid { background: #ecfdf5; color: #059669; } .stamp-paid::before { background: #059669; }
+  .stamp-pending { background: #fff7ed; color: #ea580c; } .stamp-pending::before { background: #ea580c; }
+  .stamp-overdue { background: #fef2f2; color: #dc2626; } .stamp-overdue::before { background: #dc2626; }
+  .stamp-partial { background: #eff6ff; color: #2563eb; } .stamp-partial::before { background: #2563eb; }
+
+  .fc-empty {
+    padding: 44px 24px; text-align: center; color: #8a8f9c; font-size: 13.5px;
+  }
+  .fc-empty svg { width: 32px; height: 32px; stroke: #c3c8d1; margin-bottom: 10px; }
+</style>
+
+<div class="crumb fc-crumb"><a href="{{ url_for('admin_dashboard') }}">&larr; Dashboard</a></div>
+
+<div class="fc-head">
+  <span class="eyebrow">EduSmart</span>
+  <h1>Fees Control</h1>
+</div>
+
+<form method="POST" class="fc-filter-card">
+  <div class="fc-filter-row">
+    <div class="field">
+      <label for="class">Select Class</label>
+      <select name="class" id="class" required>
+        <option value="">Choose&hellip;</option>
+        {% for c in classes %}<option value="{{ c }}" {% if c==cls %}selected{% endif %}>Class {{ c }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <label for="division">Division / Stream</label>
+      <select name="division" id="division" required>
+        <option value="">Choose&hellip;</option>
+        <option value="A" {% if div=='A' %}selected{% endif %}>A</option>
+        <option value="B" {% if div=='B' %}selected{% endif %}>B</option>
+      </select>
+    </div>
+  </div>
+  <button type="submit" class="fc-submit">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+    Fetch Students &amp; Display Fee Breakdown
+  </button>
+</form>
+
+{% if breakdown is not none %}
+{% if breakdown %}
+{% set ns = namespace(total=0, paid=0) %}
+{% for s in breakdown %}
+  {% set ns.total = ns.total + (s.total_fee|int) %}
+  {% set ns.paid = ns.paid + (s.paid_fee|int) %}
+{% endfor %}
+<div class="fc-summary">
+  <div class="fc-summary-card">
+    <div class="label">Total Fee (Class)</div>
+    <div class="value">&#8377;{{ '{:,}'.format(ns.total) }}</div>
+  </div>
+  <div class="fc-summary-card collected">
+    <div class="label">Collected</div>
+    <div class="value">&#8377;{{ '{:,}'.format(ns.paid) }}</div>
+  </div>
+  <div class="fc-summary-card due">
+    <div class="label">Outstanding</div>
+    <div class="value">&#8377;{{ '{:,}'.format(ns.total - ns.paid) }}</div>
+  </div>
+</div>
+{% endif %}
+
+<div class="fc-table-card">
+  <div class="fc-table-wrap">
+    <table class="fc-table">
+      <thead>
+        <tr><th>Student ID</th><th>Name</th><th>Total Fee</th><th>Paid</th><th>Balance</th><th>Status</th></tr>
+      </thead>
+      <tbody>
+        {% for s in breakdown %}
+        <tr>
+          <td class="sid">{{ s.student_id }}</td>
+          <td class="name">{{ s.first_name }} {{ s.last_name }}</td>
+          <td class="amt">&#8377;{{ '{:,}'.format(s.total_fee|int) }}</td>
+          <td class="amt">&#8377;{{ '{:,}'.format(s.paid_fee|int) }}</td>
+          <td class="balance">&#8377;{{ '{:,}'.format((s.total_fee|int) - (s.paid_fee|int)) }}</td>
+          <td><span class="stamp stamp-{{ s.status|lower }}">{{ s.status }}</span></td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="6">
+            <div class="fc-empty">
+              <svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+              <div>No students found for this class.</div>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+{% endblock %}
