@@ -1,0 +1,5 @@
+id,teacher_id,date,class,division,location,issue_type,description,status
+129945,T101,2026-07-25,1,A,GF-06 - Class 1-A,Technical,Projector not turning on in the classroom.,Completed
+647082,T102,2026-07-25,2,A,FF-02 - Class 2-A,Electronic,Ceiling fan making a loud noise during class.,Completed
+577272,T103,2026-07-25,3,A,FF-06 - Class 3-A,Bench,Two student benches have broken legs.,Completed
+647083,T101,2026-08-29,9,A,gf-06,Electronic,yes,Completed

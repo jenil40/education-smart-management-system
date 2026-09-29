@@ -1,0 +1,12 @@
+student_id,subject,marks,grade,term
+STU101,Mathematics,88,A,Term 1
+STU101,Science,79,B,Term 1
+STU101,English,84,A,Term 1
+STU102,Mathematics,91,A+,Term 1
+STU102,Science,85,A,Term 1
+STU103,Mathematics,67,C,Term 1
+STU103,Science,72,B,Term 1
+STU105,Mathematics,58,D,Term 1
+STU105,Science,64,C,Term 1
+STU101,maths,50,D,Term 1
+STU102,ai,50,D,Term 2

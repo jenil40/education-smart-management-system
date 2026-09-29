@@ -1,0 +1,13 @@
+student_id,password,first_name,last_name,class,division,email,phone
+STU101,stud123,jenil gabani,11,A,jenil.gabani@edusmart.edu,9687086072,
+STU102,stud123,Varun,Shah,11,A,varun.shah@edusmart.edu,9687000102
+STU103,stud123,Neha,Bhasin,11,A,neha.bhasin@edusmart.edu,9687000103
+STU104,stud123,Shreya,Joshi,11,A,shreya.joshi@edusmart.edu,9687000104
+STU105,stud123,Yash,Kumar,10,B,yash.kumar@edusmart.edu,9687000105
+STU106,stud123,Rohan,Verma,10,B,rohan.verma@edusmart.edu,9687000106
+STU107,stud123,Reyansh,Verma,10,B,reyansh.verma@edusmart.edu,9687000107
+STU108,stud123,Aarav,Patel,11,A,aarav.patel@edusmart.edu,9687000108
+STU109,stud123,Diya,Mehta,11,A,diya.mehta@edusmart.edu,9687000109
+STU110,stud123,Kabir,Solanki,9,A,kabir.solanki@edusmart.edu,9687000110
+STU111,jenil123456,jenil,gabani,mca,a,jenilgabani3@gmail.com,9054228044
+STU112,pradip1234567,pradip,makwana,11,divsion a,pradip@gmail.com,9054228044

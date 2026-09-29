@@ -1,0 +1,6 @@
+teacher_id,password,name,subject,email,phone
+T101,teach123,Meena Patel,Mathematics,meena.patel@edusmart.edu,9876500011
+T102,teach123,Nitin Shah,Science,nitin.shah@edusmart.edu,9876500022
+T103,teach123,Suhani Parekh,English,suhani.parekh@edusmart.edu,9876500033
+T104,teach123,Kashyap Dave,Computer Science,kashyap.dave@edusmart.edu,9876500044
+T105,teach123,sanjaty lalwani lodo,Computer Science,sanjay@gmail.com,9054228044
