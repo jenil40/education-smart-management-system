@@ -1,0 +1,594 @@
+/* ============================================================
+   EduSmart — design tokens
+   Aesthetic: matches the original report mockups — a warm
+   magenta-to-orange gradient stage holding soft, rounded white
+   "toolkit" cards, pill buttons, and pastel icon badges.
+   ============================================================ */
+
+:root {
+  --grad-a: #5B2A55;
+  --grad-b: #B23A55;
+  --grad-c: #E8752E;
+  --ink: #241B33;
+  --ink-soft: #4A4159;
+  --paper: #FFFFFF;
+  --panel: #FFF9F4;
+  --gold: #F5A93F;
+  --gold-deep: #E8752E;
+  --plum: #7C3159;
+  --stamp-red: #C1394A;
+  --stamp-green: #2E9E6B;
+  --slate: #7A7188;
+  --slate-light: #B9AFC7;
+  --rule: #EFE6E9;
+  --shadow: 0 10px 30px rgba(90, 30, 60, 0.16);
+  --shadow-lift: 0 20px 46px rgba(90, 30, 60, 0.24);
+  --radius: 20px;
+
+  --font-display: "Poppins", "Segoe UI", sans-serif;
+  --font-body: "Inter", "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", "Courier New", monospace;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  color: var(--ink);
+  min-height: 100vh;
+}
+
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; }
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  margin: 0 0 0.4em;
+  letter-spacing: -0.01em;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+p { line-height: 1.6; color: var(--ink-soft); }
+
+a:focus-visible, button:focus-visible, input:focus-visible,
+select:focus-visible, textarea:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
+
+/* ============================================================
+   The stage — full-viewport gradient backdrop with floating
+   doodles, holding a centered rounded "toolkit" frame. This is
+   the signature look carried through every screen.
+   ============================================================ */
+
+.stage {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 2.6rem 1.5rem;
+  background: linear-gradient(135deg, var(--grad-a) 0%, var(--grad-b) 48%, var(--grad-c) 100%);
+  overflow: hidden;
+}
+
+.stage::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background:
+    radial-gradient(circle at 20% 15%, rgba(255,255,255,0.10), transparent 40%),
+    radial-gradient(circle at 85% 80%, rgba(255,255,255,0.08), transparent 45%);
+  pointer-events: none;
+}
+
+.deco { position: absolute; opacity: 0.9; pointer-events: none; z-index: 1; }
+.deco-pencil {
+  top: 8%; left: 6%;
+  width: 14px; height: 90px;
+  background: linear-gradient(var(--gold) 0 78px, #fff 78px 86px, var(--stamp-red) 86px 90px);
+  border-radius: 6px 6px 2px 2px;
+  transform: rotate(-28deg);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.18);
+}
+.deco-eraser {
+  bottom: 10%; left: 5%;
+  width: 34px; height: 22px;
+  background: #8FC7E8;
+  border-radius: 5px;
+  transform: rotate(-12deg);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.16);
+}
+.deco-clip {
+  top: 12%; right: 7%;
+  width: 26px; height: 26px;
+  border-radius: 7px;
+  background: rgba(255,255,255,0.16);
+  border: 2px solid rgba(255,255,255,0.6);
+  transform: rotate(18deg);
+}
+.deco-dot {
+  bottom: 8%; right: 8%;
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: #8FC7E8;
+  box-shadow: 0 6px 14px rgba(0,0,0,0.16);
+}
+@media (max-width: 700px) { .deco { display: none; } }
+
+.frame {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1040px;
+  background: var(--panel);
+  border-radius: 26px;
+  box-shadow: var(--shadow-lift);
+  overflow: hidden;
+}
+
+.frame-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1.1rem 1.6rem;
+  background: rgba(255,255,255,0.55);
+  border-bottom: 1px solid rgba(90,30,60,0.08);
+  flex-wrap: wrap;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.brand .brand-mark {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-deep));
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.85rem;
+}
+
+.brand small {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.68rem;
+  color: var(--slate);
+  letter-spacing: 0.03em;
+}
+
+.topbar-user { display: flex; align-items: center; gap: 0.7rem; }
+
+.who-pill {
+  font-size: 0.78rem;
+  font-weight: 500;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(232, 117, 46, 0.14);
+  color: var(--ink);
+}
+.who-pill b { color: var(--gold-deep); font-weight: 700; }
+
+.btn-logout {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.78rem;
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--stamp-red);
+  color: var(--stamp-red);
+  background: #fff;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.btn-logout:hover { background: var(--stamp-red); color: #fff; }
+
+.frame-body {
+  padding: 2rem 2rem 2.4rem;
+  max-height: calc(100vh - 8rem);
+  overflow-y: auto;
+}
+
+.crumb {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.78rem;
+  color: var(--gold-deep);
+  margin-bottom: 1.1rem;
+}
+.crumb a:hover { text-decoration: underline; }
+
+.page-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.6rem;
+}
+.page-head h1 { font-size: 1.7rem; color: var(--ink); }
+.page-head p { margin: 0; max-width: 46ch; }
+
+/* ============================================================
+   Buttons — soft pills, like the mockup's "Open Toolkit" CTA
+   ============================================================ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.9rem;
+  padding: 0.72rem 1.4rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.15s ease;
+}
+.btn:active { transform: translateY(1px) scale(0.99); }
+
+.btn-primary { background: var(--plum); color: #fff; }
+.btn-primary:hover { background: #612046; box-shadow: var(--shadow); }
+
+.btn-accent {
+  background: linear-gradient(135deg, var(--gold), var(--gold-deep));
+  color: #fff;
+  box-shadow: 0 8px 18px rgba(232, 117, 46, 0.35);
+}
+.btn-accent:hover { filter: brightness(1.06); box-shadow: 0 10px 24px rgba(232, 117, 46, 0.45); }
+
+.btn-outline { background: #fff; border-color: var(--rule); color: var(--ink); }
+.btn-outline:hover { border-color: var(--gold-deep); color: var(--gold-deep); }
+
+.btn-block { width: 100%; justify-content: center; }
+.btn-sm { padding: 0.42rem 0.95rem; font-size: 0.78rem; }
+
+/* ============================================================
+   Forms
+   ============================================================ */
+
+label {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--slate);
+  margin-bottom: 0.4rem;
+}
+
+input[type="text"], input[type="password"], input[type="email"],
+input[type="number"], input[type="date"], input[type="tel"],
+select, textarea {
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: 0.94rem;
+  color: var(--ink);
+  padding: 0.78rem 1rem;
+  border: none;
+  border-radius: 14px;
+  background: #F3EDF1;
+  transition: box-shadow 0.15s ease, background 0.15s ease;
+}
+input:focus, select:focus, textarea:focus { background: #fff; box-shadow: 0 0 0 2.5px var(--gold); }
+
+.field { margin-bottom: 1.1rem; }
+.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (max-width: 620px) { .field-row { grid-template-columns: 1fr; } }
+
+textarea { min-height: 110px; resize: vertical; }
+.help-text { font-size: 0.8rem; color: var(--slate); margin-top: 0.3rem; }
+
+/* ============================================================
+   Cards
+   ============================================================ */
+
+.ledger {
+  position: relative;
+  background: var(--paper);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.7rem 1.8rem;
+}
+.ledger--tight { padding-top: 1.2rem; padding-bottom: 1.2rem; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.15rem;
+}
+
+.tile {
+  position: relative;
+  background: var(--paper);
+  border-radius: 18px;
+  padding: 1.5rem 1.4rem;
+  box-shadow: var(--shadow);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.tile:hover { transform: translateY(-4px); box-shadow: var(--shadow-lift); }
+
+.tile .tile-icon {
+  width: 42px; height: 42px;
+  border-radius: 13px;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, var(--gold), var(--gold-deep));
+  color: #fff;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.05rem;
+  margin-bottom: 1rem;
+}
+.grid .tile:nth-child(6n+2) .tile-icon { background: linear-gradient(135deg, #6FCF97, #2E9E6B); }
+.grid .tile:nth-child(6n+3) .tile-icon { background: linear-gradient(135deg, #8FC7E8, #4A90C7); }
+.grid .tile:nth-child(6n+4) .tile-icon { background: linear-gradient(135deg, #E893B8, #C1394A); }
+.grid .tile:nth-child(6n+5) .tile-icon { background: linear-gradient(135deg, #C9A6E8, #7C3159); }
+.grid .tile:nth-child(6n+6) .tile-icon { background: linear-gradient(135deg, #F5C563, #E8752E); }
+
+.tile h3 { font-size: 1.03rem; margin-bottom: 0.3rem; color: var(--ink); }
+.tile p { font-size: 0.84rem; margin-bottom: 1rem; }
+
+.stat-tile { text-align: left; }
+.stat-tile .num {
+  font-family: var(--font-display);
+  font-size: 2.3rem;
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1;
+  display: block;
+  margin-bottom: 0.35rem;
+}
+.stat-tile .label {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.72rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--slate);
+}
+
+/* ============================================================
+   Tables
+   ============================================================ */
+
+.table-wrap { overflow-x: auto; border-radius: 16px; box-shadow: var(--shadow); }
+
+table.ledger-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--paper);
+  font-size: 0.9rem;
+}
+
+table.ledger-table th {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-align: left;
+  color: var(--slate);
+  background: #FBF2E9;
+  padding: 0.85rem 1rem;
+  white-space: nowrap;
+}
+
+table.ledger-table td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--rule);
+  color: var(--ink-soft);
+}
+
+table.ledger-table tr:last-child td { border-bottom: none; }
+table.ledger-table tr:hover td { background: #FFF7EF; }
+
+.empty-row { text-align: center; padding: 2rem 1rem; color: var(--slate); font-style: italic; }
+
+/* ============================================================
+   Status pills
+   ============================================================ */
+
+.stamp {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+}
+
+.stamp-present, .stamp-paid, .stamp-completed, .stamp-resolved {
+  color: #fff;
+  background: linear-gradient(135deg, #6FCF97, var(--stamp-green));
+}
+.stamp-absent, .stamp-pending, .stamp-overdue {
+  color: #fff;
+  background: linear-gradient(135deg, #E8737E, var(--stamp-red));
+}
+.stamp-holiday, .stamp-leave, .stamp-exam {
+  color: #fff;
+  background: linear-gradient(135deg, var(--gold), var(--gold-deep));
+}
+
+/* ============================================================
+   Flash messages
+   ============================================================ */
+
+.flash {
+  font-size: 0.88rem;
+  padding: 0.9rem 1.15rem;
+  border-radius: 14px;
+  margin-bottom: 1.3rem;
+  background: #FBF2E9;
+  color: var(--ink);
+  border-left: 4px solid var(--gold-deep);
+}
+.flash-error { border-left-color: var(--stamp-red); background: #FBEBEC; }
+.flash-success { border-left-color: var(--stamp-green); background: #EAF7EF; }
+
+/* ============================================================
+   Login page
+   ============================================================ */
+
+.auth-card {
+  width: 100%;
+  max-width: 400px;
+  background: var(--paper);
+  border-radius: 24px;
+  padding: 2.3rem 2.1rem;
+  box-shadow: var(--shadow-lift);
+  position: relative;
+  z-index: 2;
+}
+
+.auth-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--ink);
+  margin-bottom: 1.5rem;
+}
+.auth-brand .brand-mark {
+  width: 34px; height: 34px; border-radius: 11px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-deep));
+  color: #fff; display: inline-flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 0.9rem;
+}
+.auth-brand small { display: block; font-family: var(--font-body); font-weight: 400; font-size: 0.68rem; color: var(--slate); }
+
+.auth-card .sub { font-size: 0.85rem; color: var(--slate); margin-bottom: 1.4rem; margin-top: -0.6rem; }
+
+.role-tabs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.4rem;
+  background: #F3EDF1;
+  padding: 0.35rem;
+  border-radius: 999px;
+  margin-bottom: 1.5rem;
+}
+
+.role-tab {
+  cursor: pointer;
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: 0.76rem;
+  font-weight: 600;
+  padding: 0.55rem 0.4rem;
+  border-radius: 999px;
+  color: var(--slate);
+  transition: all 0.15s ease;
+}
+.role-tab input { display: none; }
+.role-tab.active { background: var(--ink); color: #fff; box-shadow: var(--shadow); }
+
+.creds-hint {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--slate);
+  background: #F8F3F6;
+  border-radius: 12px;
+  padding: 0.7rem 0.85rem;
+  margin-top: 1.2rem;
+  line-height: 1.8;
+}
+.creds-hint b { color: var(--ink); }
+
+/* ============================================================
+   Detail lists
+   ============================================================ */
+
+.kv-list { display: flex; flex-direction: column; }
+.kv-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+.kv-row:last-child { border-bottom: none; }
+.kv-row .k { font-family: var(--font-body); font-weight: 600; font-size: 0.78rem; color: var(--slate); text-transform: uppercase; letter-spacing: 0.02em; }
+.kv-row .v { font-weight: 700; color: var(--ink); text-align: right; }
+
+.notice-card {
+  padding: 1.1rem 1.3rem;
+  margin-bottom: 1rem;
+  background: var(--paper);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  border-left: 4px solid var(--gold-deep);
+}
+.notice-card .meta {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.7rem;
+  color: var(--slate);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-bottom: 0.4rem;
+}
+.notice-card h3 { font-size: 1.03rem; margin-bottom: 0.35rem; color: var(--ink); }
+.notice-card p { font-size: 0.9rem; margin: 0; }
+
+.progress-track {
+  width: 100%;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--rule);
+  overflow: hidden;
+  margin: 0.6rem 0 0.3rem;
+}
+.progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-deep)); border-radius: 999px; }
+
+.section-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.01em;
+  color: var(--ink);
+  margin: 2rem 0 0.9rem;
+}
+
+footer.site-footer {
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.75);
+  padding: 1.3rem 1rem 0;
+}
